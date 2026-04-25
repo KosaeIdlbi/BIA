@@ -1,7 +1,7 @@
 # استخدام صورة PHP 8.2 الرسمية مع خادم Apache
 FROM php:8.2-apache
 
-# تثبيت الحزم الضرورية من النظام (System dependencies)
+# تثبيت الحزم الضرورية
 RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
@@ -12,15 +12,18 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
-    supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تفعيل Apache Rewrite Module (ضروري لعمل الروابط في Laravel)
+# تفعيل Apache Rewrite Module
 RUN a2enmod rewrite
+
+# إظهار الأخطاء في المتصفح (لنتمكن من رؤية السبب)
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
 
 # تعيين مجلد العمل
 WORKDIR /var/www/html
@@ -28,25 +31,21 @@ WORKDIR /var/www/html
 # نسخ ملفات المشروع إلى الحاوية
 COPY . /var/www/html
 
-# حل مشكلة الصلاحيات (Permissions) لإصلاح خطأ 500
-# منح Apache صلاحيات الكتابة للمجلدات الحيوية
+# حل مشكلة الصلاحيات
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage/logs \
-    && chmod -R 775 /var/www/html/storage/framework \
-    && chmod -R 775 /var/www/html/storage/app
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
-# تثبيت مكتبات PHP وتحسين الأداء
+# تثبيت مكتبات PHP فقط (بدون كاش)
 RUN composer install --optimize-autoloader --no-dev
 
-# تشغيل أوامر تحضيرية (اختياري لكن يفضل لمنع رسائل التحذير)
+# إنشاء رابط التخزين فقط
 RUN php artisan storage:link
-RUN php artisan config:cache
-RUN php artisan route:cache
 
-# توجيه Apache لاستخدام مجلد public كجذر للموقع
+# (تم حذف أوامر الكاش: config:cache و route:cache لتجنب الأخطاء)
+
+# توجيه Apache لاستخدام مجلد public
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# نقطة الدخول النهائية (تستخدم لضمان أن الصلاحيات صحيحة عند كل تشغيل)
+# نقطة الدخول مع ضمان الصلاحيات
 ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
