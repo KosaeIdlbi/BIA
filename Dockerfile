@@ -21,31 +21,34 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # تفعيل Apache Rewrite Module
 RUN a2enmod rewrite
 
-# إظهار الأخطاء في المتصفح (لنتمكن من رؤية السبب)
+# إظهار الأخطاء
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
 
-# تعيين مجلد العمل
 WORKDIR /var/www/html
 
-# نسخ ملفات المشروع إلى الحاوية
+# نسخ المشروع
 COPY . /var/www/html
 
-# حل مشكلة الصلاحيات
+# إصلاح الصلاحيات
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+    && chmod -R 777 /var/www/html/storage \
+    && chmod -R 777 /var/www/html/bootstrap/cache
 
-# تثبيت مكتبات PHP فقط (بدون كاش)
+# تثبيت مكتبات PHP
 RUN composer install --optimize-autoloader --no-dev
 
-# إنشاء رابط التخزين فقط
+# إنشاء ملف قاعدة البيانات إذا لم يكن موجوداً
+RUN touch database/database.sqlite \
+    && chown www-data:www-data database/database.sqlite \
+    && chmod 664 database/database.sqlite
+
+# إنشاء رابط التخزين
 RUN php artisan storage:link
 
-# (تم حذف أوامر الكاش: config:cache و route:cache لتجنب الأخطاء)
-
-# توجيه Apache لاستخدام مجلد public
+# توجيه Apache لمجلد public
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# نقطة الدخول مع ضمان الصلاحيات
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
+# نقطة الدخول النهائية مع الترحيل التلقائي
+# نقوم بإنشاء الملف وتشغيل المهاجرات قبل تشغيل السيرفر
+ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && touch database/database.sqlite && chmod 664 database/database.sqlite && php artisan migrate --force && exec apache2-foreground"]
