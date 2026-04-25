@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring mbstring zip exif pcntl gd bcmath
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -21,9 +21,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # تفعيل Apache Rewrite Module
 RUN a2enmod rewrite
 
-# إظهار الأخطاء
+# إظهار الأخطاء (تم إصلاح الخطأ المطبعي هنا)
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/env/php/conf.d/errors.ini
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
 
 WORKDIR /var/www/html
 
@@ -38,17 +38,16 @@ RUN chown -R www-data:www-data /var/www/html \
 # تثبيت مكتبات PHP
 RUN composer install --optimize-autoloader --no-dev
 
-# إنشاء ملف قاعدة البيانات إذا لم يكن موجوداً
+# إنشاء ملف قاعدة البيانات وضبط الصلاحيات
 RUN touch database/database.sqlite \
-    && chown نجاح البيانات:www-data database/database.sqlite \
+    && chown www-data:www-data database/database.sqlite \
     && chmod 664 database/database.sqlite
 
 # إنشاء رابط التخزين
 RUN php artisan storage:link
 
-# تبعيد Apache لمجلد public
-RUN sed -i 's/www-data:www-data /var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+# توجيه Apache لمجلد public
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 # نقطة الدخول النهائية
-# تمت إزالة migrate --force لمنع الأخطاء
-ENTRYPOINT ["/working-dir/app/public && exec apache2-foreground"]
+ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
