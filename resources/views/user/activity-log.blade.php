@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/activity-log.css') }}">
+<link rel="stylesheet" href="{{ url('css/activity-log.css') }}">
 
 @extends('user.layouts.master')
 @section('title')

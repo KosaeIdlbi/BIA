@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <link rel="stylesheet" href={{ asset('css/register.css') }}>
+    <link rel="stylesheet" href={{ url('css/register.css') }}>
     <div class="register-container">
         <div class="form-header">
             <h1>إنشاء حساب</h1>
@@ -125,5 +125,5 @@
             </a>
         </div>
     </div>
-    <script src={{ asset('js/register.js') }}></script>
+    <script src={{ url('js/register.js') }}></script>
 @endsection

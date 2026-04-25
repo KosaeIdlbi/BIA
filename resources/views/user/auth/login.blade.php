@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    <link rel="stylesheet" href={{ asset('css/login.css') }}>
+    <link rel="stylesheet" href={{ url('css/login.css') }}>
     <div class="login-container">
         <div class="form-header">
             <h1>مرحباً بعودتك</h1>
@@ -86,5 +86,5 @@
             </a>
         </div>
     </div>
-    <script src={{ asset('js/login.js') }}></script>
+    <script src={{ url('js/login.js') }}></script>
 @endsection

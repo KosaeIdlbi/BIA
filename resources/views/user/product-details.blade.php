@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/product-details.css') }}">
+<link rel="stylesheet" href="{{ url('css/product-details.css') }}">
 @extends('user.layouts.master')
 @section('title')
     المنتج

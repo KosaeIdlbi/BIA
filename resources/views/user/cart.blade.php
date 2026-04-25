@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/cart.css') }}">
+<link rel="stylesheet" href="{{ url('css/cart.css') }}">
 @extends('user.layouts.master')
 @section('title')
     السلة

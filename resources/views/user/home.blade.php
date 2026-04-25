@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/home.css') }}">
+<link rel="stylesheet" href="{{ url('css/home.css') }}">
 @extends('user.layouts.master')
 @section('title')
     الرئيسية
