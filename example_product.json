@@ -1,0 +1,806 @@
+
+{
+    "user_profile":{"electronics":0.5, "books":0.1,"fashion":0.4},
+    "products":[
+        {
+            "id": 1,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 2,
+            "category": "electronics",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 3,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 4,
+            "category": "electronics",
+            "rating": 3,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 5,
+            "category": "electronics",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 6,
+            "category": "books",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 7,
+            "category": "books",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 8,
+            "category": "books",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 9,
+            "category": "books",
+            "rating": 3,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 10,
+            "category": "books",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 11,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 12,
+            "category": "fashion",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 13,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 14,
+            "category": "fashion",
+            "rating": 3,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 15,
+            "category": "fashion",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 16,
+            "category": "home",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 17,
+            "category": "home",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 18,
+            "category": "home",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 19,
+            "category": "home",
+            "rating": 3,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 20,
+            "category": "home",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 21,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 22,
+            "category": "beauty",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 23,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 24,
+            "category": "beauty",
+            "rating": 3,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 25,
+            "category": "beauty",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 26,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 27,
+            "category": "sports",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 28,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 29,
+            "category": "sports",
+            "rating": 3,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 30,
+            "category": "sports",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 31,
+            "category": "toys",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 32,
+            "category": "toys",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 33,
+            "category": "toys",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 34,
+            "category": "toys",
+            "rating": 3,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 35,
+            "category": "toys",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 36,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 37,
+            "category": "food",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 38,
+            "category": "food",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 39,
+            "category": "food",
+            "rating": 3,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 40,
+            "category": "food",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 41,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 42,
+            "category": "electronics",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 43,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 44,
+            "category": "books",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 45,
+            "category": "books",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 46,
+            "category": "books",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 47,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 48,
+            "category": "fashion",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 49,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 50,
+            "category": "home",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 51,
+            "category": "home",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 52,
+            "category": "home",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 53,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 54,
+            "category": "beauty",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 55,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 56,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 57,
+            "category": "sports",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 58,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 59,
+            "category": "toys",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 60,
+            "category": "toys",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 61,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 62,
+            "category": "food",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 63,
+            "category": "electronics",
+            "rating": 3,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 64,
+            "category": "books",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 65,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 66,
+            "category": "home",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 67,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 68,
+            "category": "sports",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 69,
+            "category": "toys",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 70,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 71,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 72,
+            "category": "books",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 73,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 74,
+            "category": "home",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 75,
+            "category": "beauty",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 76,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 77,
+            "category": "toys",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 78,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 79,
+            "category": "electronics",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 80,
+            "category": "books",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 81,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 82,
+            "category": "home",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 83,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 84,
+            "category": "sports",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 85,
+            "category": "toys",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 86,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 87,
+            "category": "electronics",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 88,
+            "category": "books",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 89,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 90,
+            "category": "home",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 91,
+            "category": "beauty",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 92,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 93,
+            "category": "toys",
+            "rating": 4,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 94,
+            "category": "food",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 95,
+            "category": "electronics",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 96,
+            "category": "books",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 97,
+            "category": "fashion",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 0
+        },
+        {
+            "id": 98,
+            "category": "home",
+            "rating": 4,
+            "clicked": 1,
+            "viewd": 0,
+            "purchased": 0
+        },
+        {
+            "id": 99,
+            "category": "beauty",
+            "rating": 5,
+            "clicked": 1,
+            "viewd": 1,
+            "purchased": 1
+        },
+        {
+            "id": 100,
+            "category": "sports",
+            "rating": 5,
+            "clicked": 0,
+            "viewd": 1,
+            "purchased": 0
+        }
+    ]
+}
