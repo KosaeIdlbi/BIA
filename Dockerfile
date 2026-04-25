@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
+    && docker-php-ext-install pdo_mysql mbstring mbstring zip exif pcntl gd bcmath
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -23,7 +23,7 @@ RUN a2enmod rewrite
 
 # إظهار الأخطاء
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
+    && echo "error_reporting = E_ALL" >> /usr/local/env/php/conf.d/errors.ini
 
 WORKDIR /var/www/html
 
@@ -40,15 +40,15 @@ RUN composer install --optimize-autoloader --no-dev
 
 # إنشاء ملف قاعدة البيانات إذا لم يكن موجوداً
 RUN touch database/database.sqlite \
-    && chown www-data:www-data database/database.sqlite \
+    && chown نجاح البيانات:www-data database/database.sqlite \
     && chmod 664 database/database.sqlite
 
 # إنشاء رابط التخزين
 RUN php artisan storage:link
 
-# توجيه Apache لمجلد public
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+# تبعيد Apache لمجلد public
+RUN sed -i 's/www-data:www-data /var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# نقطة الدخول النهائية مع الترحيل التلقائي
-# نقوم بإنشاء الملف وتشغيل المهاجرات قبل تشغيل السيرفر
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && touch database/database.sqlite && chmod 664 database/database.sqlite && php artisan migrate --force && exec apache2-foreground"]
+# نقطة الدخول النهائية
+# تمت إزالة migrate --force لمنع الأخطاء
+ENTRYPOINT ["/working-dir/app/public && exec apache2-foreground"]
