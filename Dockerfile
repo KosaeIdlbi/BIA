@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
+    rsync \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
 
@@ -44,7 +45,6 @@ RUN php artisan storage:link
 # توجيه Apache لمجلد public
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# نقطة الدخول النهائية (الحل الجذري)
-# هذا الأمر سيعيد بناء قاعدة البيانات من الصفر في كل مرة يُشغل فيها الموقع
-# لضمان عدم وجود أي مشاكل في الصلاحيات
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && rm -f database/database.sqlite && touch database/database.sqlite && chmod 666 database/database.sqlite && php artisan migrate --force && exec apache2-foreground"]
+# نقطة الدخول مع التسجيل (Logging)
+# سيستخدم rsync لنسخ الملف بدقة، ويسجل النتائج في ملف startup.log
+ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && echo 'Starting Database Copy...' > /var/www/html/logs/startup.log && rsync -a /var/www/html/database/database.sqlite.template /var/www/html/database/database.sqlite 2>> /var/www/html/logs/startup.log && chmod 666 /var/www/html/database/database.sqlite && echo 'Database Copy Done.' >> /var/www/html/logs/startup.log && exec apache2-foreground"]
