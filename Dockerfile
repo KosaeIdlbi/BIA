@@ -1,54 +1,40 @@
-# استخدام صورة PHP 8.2 الرسمية مع خادم Apache
-FROM php:8.2-apache
+# استخدام PHP مع FPM
+FROM php:8.3-fpm
 
-# تثبيت الحزم الضرورية
+# تثبيت الحزم المطلوبة
 RUN apt-get update && apt-get install -y \
-    libonig-dev \
-    libzip-dev \
-    zip \
-    unzip \
     git \
+    unzip \
     curl \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
+    libpq-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    nginx \
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تفعيل Apache Rewrite Module
-RUN a2enmod rewrite
-
-# إظهار الأخطاء
-RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
-
-WORKDIR /var/www/html
+# تحديد مجلد العمل
+WORKDIR /var/www
 
 # نسخ المشروع
-COPY . /var/www/html
+COPY . .
 
-# إصلاح الصلاحيات
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 777 /var/www/html/storage \
-    && chmod -R 777 /var/www/html/bootstrap/cache
+# تثبيت dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# تثبيت مكتبات PHP
-RUN composer install --optimize-autoloader --no-dev
+# إعطاء صلاحيات
+RUN chmod -R 775 storage bootstrap/cache
 
-# إنشاء ملف قاعدة البيانات إذا لم يكن موجوداً
-RUN touch database/database.sqlite \
-    && chown www-data:www-data database/database.sqlite \
-    && chmod 664 database/database.sqlite
+# توليد كاش (اختياري لكنه مفيد)
+RUN php artisan config:cache || true
+RUN php artisan route:cache || true
+RUN php artisan view:cache || true
 
-# إنشاء رابط التخزين
-RUN php artisan storage:link
+# فتح البورت (Render يعتمد على PORT)
+EXPOSE 10000
 
-# توجيه Apache لمجلد public
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
-
-# نقطة الدخول النهائية مع الترحيل التلقائي
-# نقوم بإنشاء الملف وتشغيل المهاجرات قبل تشغيل السيرفر
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && touch database/database.sqlite && chmod 664 database/database.sqlite && php artisan migrate --force && exec apache2-foreground"]
+# تشغيل السيرفر
+CMD php artisan serve --host=0.0.0.0 --port=$PORT
