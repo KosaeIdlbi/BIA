@@ -51,6 +51,5 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 
 # --- NEW: تغيير نقطة الدخول لاستخدام ملف السكربت الخاص بنا ---
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
 # الأمر الافتراضي (سيرفر Apache) سيتم تمريره للسكربت عند التنفيذ
 CMD ["apache2-foreground"]
