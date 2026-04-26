@@ -1,51 +1,24 @@
-# استخدام صورة PHP 8.2 الرسمية مع خادم Apache
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# تثبيت الحزم الضرورية
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libonig-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip
 
-# تثبيت Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# تفعيل Apache Rewrite Module
-RUN a2enmod rewrite
+WORKDIR /var/www
 
-# إظهار الأخطاء في المتصفح (لنتمكن من رؤية السبب)
-RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
+# Copy app files
+COPY . .
 
-# تعيين مجلد العمل
-WORKDIR /var/www/html
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# نسخ ملفات المشروع إلى الحاوية
-COPY . /var/www/html
+# Laravel setup
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear
 
-# حل مشكلة الصلاحيات
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
-
-# تثبيت مكتبات PHP فقط (بدون كاش)
-RUN composer install --optimize-autoloader --no-dev
-
-# إنشاء رابط التخزين فقط
-RUN php artisan storage:link
-
-# (تم حذف أوامر الكاش: config:cache و route:cache لتجنب الأخطاء)
-
-# توجيه Apache لاستخدام مجلد public
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
-
-# نقطة الدخول مع ضمان الصلاحيات
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
+CMD ["php-fpm"]
