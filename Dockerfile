@@ -31,9 +31,7 @@ WORKDIR /var/www/html
 # نسخ ملفات المشروع
 COPY . /var/www/html
 
-# --- NEW: نسخ ملف entrypoint.sh وإعطاءه صلاحيات التنفيذ ---
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+
 
 # حل مشكلة الصلاحيات
 RUN chown -R www-data:www-data /var/www/html \
@@ -50,6 +48,11 @@ RUN php artisan storage:link
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 # --- NEW: تغيير نقطة الدخول لاستخدام ملف السكربت الخاص بنا ---
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# --- NEW: نسخ ملف entrypoint.sh وإعطاءه صلاحيات التنفيذ ---
+# COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# RUN chmod +x /usr/local/bin/entrypoint.sh
+# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+
 # الأمر الافتراضي (سيرفر Apache) سيتم تمريره للسكربت عند التنفيذ
 CMD ["apache2-foreground"]
