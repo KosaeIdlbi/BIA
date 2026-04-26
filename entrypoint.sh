@@ -25,7 +25,7 @@ php artisan migrate --force
 # --- 4. تشغيل البذور (Seeders) ---
 # أضفنا || true لاستمرار العمل حتى لو حدث خطأ في الـ Seed (لتجنب مشاكل البيانات المكررة)
 echo "Running seeders..."
-php artisan db:seed --force -v || true
+# php artisan db:seed --force -v || true
 
 echo "Starting server..."
 

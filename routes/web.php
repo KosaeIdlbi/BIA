@@ -9,10 +9,10 @@ Route::get('/health', function () {
 Route::get('/seed', function () {
     for ($i = 1; $i <= 100; $i++) {
         Product::create([
-            "name" => "product" . rand(1, 1000000),
+            "name" => "product_" . rand(1, 10000),
             "category" => ["Electronics", "Cleaning products", "Food", "Clothing"][rand(0, 3)],
             // "category" => ["fashion", "books", "electronics"][rand(0, 2)],
-            "price" => rand(1000, 50000),
+            "price" => rand(100, 5000),
         ]);
     }
     return redirect()->back();
