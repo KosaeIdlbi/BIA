@@ -190,7 +190,9 @@ class Suggestions extends Component
                 'api-key' => 'SABVGDFCUWQAHVDFCANSJC431243##4544@GASGDCgdcfgs',
             ])->post('https://genetic-alogrithm-api.vercel.app/recommend', $data); // {"recommended_products":[94,94,94,94,94]}
 
-            return Product::inRandomOrder()->whereIn("id", $response->json()['recommended_products'])->get();
+            if ($response->json()) {
+                return Product::inRandomOrder()->whereIn("id", $response->json()['recommended_products'])->get();
+            }
             // return $response->json();
         }
         return Product::inRandomOrder()->take(4)->get();
