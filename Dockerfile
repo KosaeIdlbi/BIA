@@ -48,10 +48,9 @@ RUN php artisan storage:link
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 # --- NEW: تغيير نقطة الدخول لاستخدام ملف السكربت الخاص بنا ---
-# --- NEW: نسخ ملف entrypoint.sh وإعطاءه صلاحيات التنفيذ ---
-# COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-# RUN chmod +x /usr/local/bin/entrypoint.sh
-# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 
 # الأمر الافتراضي (سيرفر Apache) سيتم تمريره للسكربت عند التنفيذ

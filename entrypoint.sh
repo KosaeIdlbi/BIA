@@ -11,14 +11,13 @@ echo "Database connected!"
 
 # 2. تشغيل المهاجرات (Migrate)
 # --force ضروري لأننا في بيئة إنتاج (Production) ويمنع لارافيل التهجير تلقائياً
-echo "Running migrations..."
-php artisan migrate --force
+# echo "Running migrations..."
+# php artisan migrate --force
 
 # 3. تشغيل البذور (Seeders)
 # فقط إذا أردت تشغيلها دائماً
 echo "Running seeders..."
 php artisan db:seed --force
-php artisan db:seed
 # 4. تشغيل الأمر الرئيسي للحاوية (السيرفر)
 # هذا الأمر سينفذ الأمر المرسل كمدخل للحاوية
 exec "$@"

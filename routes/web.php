@@ -9,7 +9,7 @@ Route::get('/health', function () {
 Route::get('/seed', function () {
     for ($i = 1; $i <= 100; $i++) {
         Product::create([
-            "name" => fake()->text(15),
+            "name" => \Faker\Factory::create()->text(),
             "category" => ["Electronics", "Cleaning products", "Food", "Clothing"][rand(0, 3)],
             // "category" => ["fashion", "books", "electronics"][rand(0, 2)],
             "price" => rand(1000, 50000),
