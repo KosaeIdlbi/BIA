@@ -1,51 +1,33 @@
-# استخدام صورة PHP 8.2 الرسمية مع خادم Apache
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-# تثبيت الحزم الضرورية
+# تثبيت المتطلبات الأساسية فقط (تقليل فشل build)
 RUN apt-get update && apt-get install -y \
-    libonig-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
+    git unzip curl libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
-# تثبيت Composer
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تفعيل Apache Rewrite Module
-RUN a2enmod rewrite
+WORKDIR /app
 
-# إظهار الأخطاء في المتصفح (لنتمكن من رؤية السبب)
-RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
-    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
+# نسخ المشروع
+COPY . .
 
-# تعيين مجلد العمل
-WORKDIR /var/www/html
+# تثبيت dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# نسخ ملفات المشروع إلى الحاوية
-COPY . /var/www/html
+# إصلاح الصلاحيات (مهم جدًا)
+RUN chmod -R 777 storage bootstrap/cache || true
 
-# حل مشكلة الصلاحيات
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+# إجبار Laravel على وجود key (تجنب crash)
+RUN php artisan key:generate || true
 
-# تثبيت مكتبات PHP فقط (بدون كاش)
-RUN composer install --optimize-autoloader --no-dev
+# تنظيف الكاش
+RUN php artisan config:clear || true
+RUN php artisan route:clear || true
 
-# إنشاء رابط التخزين فقط
-RUN php artisan storage:link
+# فتح البورت الذي يتوقعه Render
+EXPOSE 10000
 
-# (تم حذف أوامر الكاش: config:cache و route:cache لتجنب الأخطاء)
-
-# توجيه Apache لاستخدام مجلد public
-RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
-
-# نقطة الدخول مع ضمان الصلاحيات
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
+# 🔥 أهم سطر: تشغيل PHP server بشكل مباشر
+CMD php -S 0.0.0.0:$PORT -t public
