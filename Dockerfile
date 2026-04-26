@@ -1,40 +1,36 @@
-# استخدام PHP مع FPM
-FROM php:8.3-fpm
+FROM php:8.3-cli
 
-# تثبيت الحزم المطلوبة
+# تثبيت المتطلبات
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libpq-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    nginx \
-    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath
+    git unzip curl libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تحديد مجلد العمل
 WORKDIR /var/www
 
 # نسخ المشروع
 COPY . .
 
-# تثبيت dependencies
+# تثبيت Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# إعطاء صلاحيات
-RUN chmod -R 775 storage bootstrap/cache
+# إصلاح الصلاحيات
+RUN chmod -R 775 storage bootstrap/cache || true
 
-# توليد كاش (اختياري لكنه مفيد)
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-RUN php artisan view:cache || true
+# إنشاء APP_KEY تلقائيًا إذا غير موجود
+RUN php artisan key:generate --force || true
 
-# فتح البورت (Render يعتمد على PORT)
+# حذف الكاش القديم (مهم)
+RUN php artisan config:clear || true
+RUN php artisan route:clear || true
+RUN php artisan view:clear || true
+
+# تأكد أن public هو root
+WORKDIR /var/www/public
+
 EXPOSE 10000
 
-# تشغيل السيرفر
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+# 🔥 الحل النهائي: تشغيل PHP مباشرة بدون artisan serve
+CMD php -S 0.0.0.0:$PORT index.php
