@@ -1,7 +1,6 @@
-# استخدام صورة PHP 8.2 الرسمية مع خادم Apache
 FROM php:8.2-apache
 
-# تثبيت الحزم الضرورية (تم إضافة libpq-dev لـ postgres)
+# تثبيت الحزم الضرورية (بما في ذلك مكتبة postgres)
 RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
@@ -22,7 +21,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # تفعيل Apache Rewrite Module
 RUN a2enmod rewrite
 
-# إظهار الأخطاء في المتصفح
+# إظهار الأخطاء
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
 
@@ -31,6 +30,10 @@ WORKDIR /var/www/html
 
 # نسخ ملفات المشروع
 COPY . /var/www/html
+
+# --- NEW: نسخ ملف entrypoint.sh وإعطاءه صلاحيات التنفيذ ---
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # حل مشكلة الصلاحيات
 RUN chown -R www-data:www-data /var/www/html \
@@ -46,5 +49,8 @@ RUN php artisan storage:link
 # توجيه Apache لاستخدام مجلد public
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# نقطة الدخول
-ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
+# --- NEW: تغيير نقطة الدخول لاستخدام ملف السكربت الخاص بنا ---
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# الأمر الافتراضي (سيرفر Apache) سيتم تمريره للسكربت عند التنفيذ
+CMD ["apache2-foreground"]
