@@ -1,36 +1,51 @@
-FROM php:8.3-cli
+# استخدام صورة PHP 8.2 الرسمية مع خادم Apache
+FROM php:8.2-apache
 
-# تثبيت المتطلبات
+# تثبيت الحزم الضرورية
 RUN apt-get update && apt-get install -y \
-    git unzip curl libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    libonig-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl gd bcmath
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+# تفعيل Apache Rewrite Module
+RUN a2enmod rewrite
 
-# نسخ المشروع
-COPY . .
+# إظهار الأخطاء في المتصفح (لنتمكن من رؤية السبب)
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/errors.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/errors.ini
 
-# تثبيت Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
+# تعيين مجلد العمل
+WORKDIR /var/www/html
 
-# إصلاح الصلاحيات
-RUN chmod -R 775 storage bootstrap/cache || true
+# نسخ ملفات المشروع إلى الحاوية
+COPY . /var/www/html
 
-# إنشاء APP_KEY تلقائيًا إذا غير موجود
-RUN php artisan key:generate --force || true
+# حل مشكلة الصلاحيات
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
-# حذف الكاش القديم (مهم)
-RUN php artisan config:clear || true
-RUN php artisan route:clear || true
-RUN php artisan view:clear || true
+# تثبيت مكتبات PHP فقط (بدون كاش)
+RUN composer install --optimize-autoloader --no-dev
 
-# تأكد أن public هو root
-WORKDIR /var/www/public
+# إنشاء رابط التخزين فقط
+RUN php artisan storage:link
 
-EXPOSE 10000
+# (تم حذف أوامر الكاش: config:cache و route:cache لتجنب الأخطاء)
 
-# 🔥 الحل النهائي: تشغيل PHP مباشرة بدون artisan serve
-CMD php -S 0.0.0.0:$PORT index.php
+# توجيه Apache لاستخدام مجلد public
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+
+# نقطة الدخول مع ضمان الصلاحيات
+ENTRYPOINT ["/bin/bash", "-c", "chown -R www-data:www-data /var/www/html && exec apache2-foreground"]
