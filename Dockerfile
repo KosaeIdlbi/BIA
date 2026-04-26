@@ -1,33 +1,59 @@
-FROM php:8.2-cli
+FROM php:8.2-apache
 
-# تثبيت المتطلبات الأساسية فقط (تقليل فشل build)
+# =========================
+# تثبيت المتطلبات
+# =========================
 RUN apt-get update && apt-get install -y \
-    git unzip curl libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    git unzip curl zip \
+    libpq-dev \
+    libonig-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        pdo_pgsql \
+        mbstring \
+        zip \
+        exif \
+        pcntl \
+        gd \
+        bcmath
 
+# =========================
 # Composer
+# =========================
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+# =========================
+# Apache config
+# =========================
+RUN a2enmod rewrite
 
-# نسخ المشروع
+# جعل public هو root
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+
+# =========================
+# إعداد المشروع
+# =========================
+WORKDIR /var/www/html
 COPY . .
 
-# تثبيت dependencies
+# صلاحيات
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
+
+# تثبيت Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# إصلاح الصلاحيات (مهم جدًا)
-RUN chmod -R 777 storage bootstrap/cache || true
+# =========================
+# أهم جزء: دعم PORT الخاص بـ Render
+# =========================
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf \
+    /etc/apache2/sites-available/000-default.conf
 
-# إجبار Laravel على وجود key (تجنب crash)
-RUN php artisan key:generate || true
-
-# تنظيف الكاش
-RUN php artisan config:clear || true
-RUN php artisan route:clear || true
-
-# فتح البورت الذي يتوقعه Render
-EXPOSE 10000
-
-# 🔥 أهم سطر: تشغيل PHP server بشكل مباشر
-CMD php -S 0.0.0.0:$PORT -t public
+# =========================
+# تشغيل Apache
+# =========================
+CMD ["sh", "-c", "apache2-foreground"]
